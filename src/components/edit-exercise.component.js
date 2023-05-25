@@ -6,7 +6,7 @@ import axios from 'axios';
 export default class EditExercises extends Component {
     constructor(props){
         super(props);
-
+        
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangeDuration = this.onChangeDuration.bind(this);
@@ -23,7 +23,9 @@ export default class EditExercises extends Component {
     }
 
     componentDidMount(){
-        axios.get('http:/localhost:5000/exercises/'+this.props.match.params.id)
+        console.log(this.props)
+        let id = this.props.match.params.id
+        axios.get('http:/localhost:5000/exercises/'+ id)
             .then(response=> {
                 this.setState({
                     username:response.data.username,
@@ -31,7 +33,8 @@ export default class EditExercises extends Component {
                     duration:response.data.duration,
                     date: new Date(response.data.date)
                 })
-            }).catch(function (error) {
+            })
+            .catch(function (error) {
                 console.log(error)
             })
         axios.get('http://localhost:5000/users/')
@@ -75,7 +78,6 @@ export default class EditExercises extends Component {
             duration: this.state.duration,
             date: this.state.date
         }
-        console.log(exercise);
         axios.post('http://localhost:5000/exercises/update/'+this.props.match.params.id, exercise)
             .then(res => console.log(res.data))
         window.location = '/';
@@ -112,6 +114,7 @@ export default class EditExercises extends Component {
                             className='form-control'
                             value={this.state.description}
                             onChange={this.onChangeDescription}
+                            placeholder={this.state.description}
                         />
                     </div>
                     <div className='form-group'>
